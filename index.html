@@ -727,16 +727,16 @@ function scheduleFor(dow){
     ({1:()=>{add('lower_b'); if(w>=2) add('bike_thr');},
       2:()=>add('easy_bike'),
       3:()=>{add('upper_b'); if(w>=5) add('ski_vo2');},
-      4:()=>add('easy_ski',true),
-      5:()=>{add('lower_a');add('upper_a');},
+      4:()=>add('upper_a'),
+      5:()=>add('lower_a'),
       6:()=>{add('sat_knee');add('upper_c',true);},
-      0:()=>{}})[dow]();
+      0:()=>add('easy_ski',true)})[dow]();
   } else if(ph===2){
     ({1:()=>{add('lower_b');add('bike_thr');},
       2:()=>{add('walk_run');add('easy_bike');},
       3:()=>{add('upper_b');add('ski_vo2');},
-      4:()=>{add('walk_run');add('easy_bike');},
-      5:()=>{add('lower_a');add('upper_a');},
+      4:()=>{add('walk_run');add('upper_a');add('easy_bike',true);},
+      5:()=>add('lower_a'),
       6:()=>{add('walk_run');add('knee_b');add('upper_c',true);},
       0:()=>{add('sun_bike',true);}})[dow]();
   } else if(ph===3){
@@ -744,16 +744,16 @@ function scheduleFor(dow){
     ({1:()=>{ if(b>=2){add('quality_run');add('lower_b');} else {add('lower_b');add('erg_thr');} },
       2:()=>{add('easy_run');add('easy_bike');},
       3:()=>{add('upper_b'); if(b===0||(b>=2&&wk%2===0)) add(b>=2?'bike_3030':'ski_vo2'); },
-      4:()=>{add('easy_run');add('easy_bike');},
-      5:()=>{add('lower_a');add('upper_a');},
+      4:()=>{add('easy_run');add('upper_a');add('easy_bike',true);},
+      5:()=>add('lower_a'),
       6:()=>{ if(b===1) add('easy_run'); add('upper_c',true); },
       0:()=>{add('long_run');}})[dow]();
   } else {
     ({1:()=>{add('thr_run');add('lower_b');},
       2:()=>{add('easy_run');add('easy_bike');},
       3:()=>{add('hyrox');add('upper_b');},
-      4:()=>{add('easy_run');add('easy_bike');},
-      5:()=>{add('lower_a');add('upper_a');},
+      4:()=>{add('easy_run');add('upper_a');add('easy_bike',true);},
+      5:()=>add('lower_a'),
       6:()=>{add('upper_c',true);},
       0:()=>{add('long_run');}})[dow]();
   }
@@ -1305,7 +1305,7 @@ function renderToday(){
       <div class="week">${weekDots}</div>
       <div class="small muted">Run ${runM} min · Erg and bike ${ergM} min${ratio?` · Load ${ratio}×`:''}${!gConnected()?' · <button class="link" onclick="gConnect()">Connect Garmin</button>':''}</div>
     </div>
-    ${optionalExtrasHTML()}
+
   </div>`;
 }
 function optionalExtrasHTML(){
