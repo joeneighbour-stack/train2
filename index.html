@@ -1128,16 +1128,14 @@ function gScore(data,sessionKey){
   const acute=sum(acts.filter(a=>a.date>=wk7)), chronic=sum(acts)/4;
   if(chronic>=50){ const ratio=Math.round(acute/chronic*100)/100; const st=ratio>G_RULES.loadRed?'red':ratio>G_RULES.loadAmber?'amber':'ok';
     add('load','Load',`${ratio}×`,st,'7d vs 28d'); }
-  if(data.daily&&data.daily.jetLag) add('jet','Jet lag','active','amber',data.daily.jetLag);
   if(sessionKey&&/^lower/.test(sessionKey)){
     const since=addDays(date,-G_RULES.legsDays);
     const heavy=acts.filter(a=>a.legs&&a.date>=since&&((a.elev||0)>=G_RULES.legsElev||(a.mins||0)>=G_RULES.legsMins||(a.load||0)>=G_RULES.legsLoad));
     if(heavy.length) add('legs','Legs','tired','amber',`${heavy[0].type.replace(/_/g,' ')} ${heavy[0].mins||'?'} min`);
   }
   const reds=sig.filter(s=>s.state==='red').length, ambers=sig.filter(s=>s.state==='amber').length;
-  const jetPlus=sig.some(s=>s.key==='jet')&&ambers>=2;
   const legsOnly=ambers===1&&sig.some(s=>s.key==='legs'&&s.state==='amber');
-  let level='green'; if(reds||jetPlus) level='red'; else if(ambers>=2||legsOnly) level='amber';
+  let level='green'; if(reds) level='red'; else if(ambers>=2||legsOnly) level='amber';
   if(!sig.filter(s=>s.state!=='na').length) level='none';
   const reasons=sig.filter(s=>s.state==='red'||s.state==='amber').map(s=>`${s.label}${s.note?' '+s.note:''}`);
   return {level,signals:sig,reasons,ratio:chronic>=50?Math.round(acute/chronic*100)/100:null};
